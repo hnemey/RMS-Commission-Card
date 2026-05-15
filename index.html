@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rocky Mountain Services — Commission Cards</title>
+  <style>
+    :root {
+      --orange:  #E05A14;
+      --orange2: #c44e0f;
+      --black:   #111111;
+      --dark:    #1a1a1a;
+      --card:    #222222;
+      --border:  #333333;
+      --white:   #ffffff;
+      --gray:    #aaaaaa;
+      --green:   #4caf50;
+      --light-bg:#f5efe6;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: var(--black);
+      color: var(--white);
+      min-height: 100vh;
+    }
+
+    /* ── Header ── */
+    header {
+      background: var(--dark);
+      border-bottom: 3px solid var(--orange);
+      padding: 16px 32px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    header img {
+      height: 70px;
+      width: 70px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    header .title-block h1 {
+      font-size: 1.6rem;
+      font-weight: 900;
+      color: var(--orange);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+    header .title-block p {
+      font-size: 0.8rem;
+      color: var(--gray);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    /* ── View Toggle ── */
+    .view-toggle {
+      display: flex;
+      justify-content: center;
+      gap: 0;
+      padding: 24px 0 0;
+    }
+    .view-toggle button {
+      padding: 12px 40px;
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      border: 2px solid var(--orange);
+      background: transparent;
+      color: var(--gray);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .view-toggle button:first-child { border-radius: 6px 0 0 6px; border-right: none; }
+    .view-toggle button:last-child  { border-radius: 0 6px 6px 0; border-left: 1px solid var(--orange); }
+    .view-toggle button.active {
+      background: var(--orange);
+      color: var(--white);
+    }
+    .view-toggle button:hover:not(.active) { color: var(--white); background: #2a2a2a; }
+
+    /* ── Views ── */
+    .view { display: none; padding: 32px; max-width: 1200px; margin: 0 auto; }
+    .view.active { display: block; }
+
+    /* ── Login Card ── */
+    .login-wrap {
+      display: flex;
+      justify-content: center;
+      padding-top: 16px;
+    }
+    .login-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-top: 4px solid var(--orange);
+      border-radius: 10px;
+      padding: 36px 40px;
+      width: 380px;
+    }
+    .login-card h2 {
+      font-size: 1.1rem;
+      color: var(--orange);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 6px;
+    }
+    .login-card p { font-size: 0.85rem; color: var(--gray); margin-bottom: 24px; }
+    .login-card label { display: block; font-size: 0.8rem; color: var(--gray); margin-bottom: 6px; letter-spacing: 1px; text-transform: uppercase; }
+    .login-card input[type="password"],
+    .login-card select {
+      width: 100%;
+      padding: 11px 14px;
+      background: var(--dark);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--white);
+      font-size: 0.95rem;
+      margin-bottom: 18px;
+      outline: none;
+    }
+    .login-card input[type="password"]:focus,
+    .login-card select:focus { border-color: var(--orange); }
+    .login-card select option { background: var(--dark); }
+    .btn-primary {
+      width: 100%;
+      padding: 12px;
+      background: var(--orange);
+      color: var(--white);
+      font-weight: 700;
+      font-size: 1rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn-primary:hover { background: var(--orange2); }
+    .error-msg {
+      color: #ff5252;
+      font-size: 0.85rem;
+      margin-top: 12px;
+      text-align: center;
+      display: none;
+    }
+
+    /* ── Commission Card ── */
+    .comm-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-top: 4px solid var(--orange);
+      border-radius: 10px;
+      padding: 28px 32px;
+      margin-bottom: 24px;
+    }
+    .comm-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .comm-card-header .employee-info h2 {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--white);
+    }
+    .comm-card-header .employee-info .role {
+      font-size: 0.8rem;
+      color: var(--orange);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-top: 3px;
+    }
+    .period-badge {
+      background: var(--dark);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 8px 16px;
+      text-align: right;
+    }
+    .period-badge .period-label { font-size: 0.7rem; color: var(--gray); text-transform: uppercase; letter-spacing: 1px; }
+    .period-badge .period-val   { font-size: 1rem; font-weight: 700; color: var(--white); margin-top: 2px; }
+
+    /* ── Stats Grid ── */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .stat-box {
+      background: var(--dark);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+    }
+    .stat-box .stat-label { font-size: 0.72rem; color: var(--gray); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+    .stat-box .stat-val   { font-size: 1.5rem; font-weight: 800; color: var(--white); }
+    .stat-box .stat-val.orange { color: var(--orange); }
+    .stat-box .stat-val.green  { color: var(--green); }
+
+    /* ── Service Breakdown Table ── */
+    .section-title {
+      font-size: 0.75rem;
+      color: var(--orange);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 12px;
+      font-weight: 700;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+    thead th {
+      text-align: left;
+      padding: 10px 12px;
+      background: var(--dark);
+      color: var(--gray);
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      border-bottom: 1px solid var(--border);
+    }
+    tbody td {
+      padding: 12px 12px;
+      border-bottom: 1px solid var(--border);
+      color: var(--white);
+    }
+    tbody tr:last-child td { border-bottom: none; }
+    tbody tr:hover td { background: rgba(224,90,20,0.06); }
+    .td-orange { color: var(--orange); font-weight: 700; }
+    .td-green  { color: var(--green);  font-weight: 700; }
+
+    /* ── Total Row ── */
+    .total-row {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 20px;
+      gap: 32px;
+    }
+    .total-item { text-align: right; }
+    .total-item .total-label { font-size: 0.72rem; color: var(--gray); text-transform: uppercase; letter-spacing: 1px; }
+    .total-item .total-val   { font-size: 1.8rem; font-weight: 900; color: var(--orange); margin-top: 4px; }
+    .total-item .total-val.white { color: var(--white); font-size: 1.4rem; }
+
+    /* ── Divider ── */
+    .divider { border: none; border-top: 1px solid var(--border); margin: 20px 0; }
+
+    /* ── YTD Bar ── */
+    .ytd-section { margin-top: 20px; }
+    .ytd-label-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      color: var(--gray);
+      margin-bottom: 6px;
+    }
+    .ytd-label-row span:last-child { color: var(--orange); font-weight: 700; }
+    .ytd-bar-bg {
+      height: 10px;
+      background: var(--dark);
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    .ytd-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--orange), #ff8c3a);
+      border-radius: 10px;
+      transition: width 1s ease;
+    }
+
+    /* ── Boss Summary Banner ── */
+    .company-banner {
+      background: linear-gradient(135deg, var(--dark) 0%, #1f1f1f 100%);
+      border: 1px solid var(--border);
+      border-left: 6px solid var(--orange);
+      border-radius: 10px;
+      padding: 24px 32px;
+      margin-bottom: 32px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 32px;
+      align-items: center;
+    }
+    .company-banner .banner-label {
+      font-size: 0.7rem;
+      color: var(--gray);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+    .company-banner .banner-val {
+      font-size: 2rem;
+      font-weight: 900;
+      margin-top: 4px;
+    }
+    .company-banner .banner-val.orange { color: var(--orange); }
+    .company-banner .banner-val.white  { color: var(--white);  }
+    .company-banner .banner-val.green  { color: var(--green);  }
+    .banner-divider {
+      width: 1px;
+      height: 48px;
+      background: var(--border);
+    }
+
+    .boss-month-tag {
+      font-size: 0.8rem;
+      color: var(--gray);
+      text-align: right;
+      margin-bottom: 16px;
+    }
+
+    /* ── Logout / Back buttons ── */
+    .action-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .btn-ghost {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--gray);
+      padding: 8px 18px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: all 0.2s;
+    }
+    .btn-ghost:hover { border-color: var(--orange); color: var(--orange); }
+
+    /* ── Employee pill list in boss view ── */
+    .emp-pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 28px;
+    }
+    .emp-pill {
+      padding: 8px 20px;
+      border-radius: 30px;
+      border: 1px solid var(--border);
+      background: var(--dark);
+      color: var(--gray);
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .emp-pill.active, .emp-pill:hover { border-color: var(--orange); color: var(--white); background: rgba(224,90,20,0.15); }
+
+    /* ── Responsive ── */
+    @media (max-width: 600px) {
+      header { padding: 12px 16px; gap: 12px; }
+      header img { height: 52px; width: 52px; flex-shrink: 0; }
+      header .title-block h1 { font-size: 1rem; line-height: 1.2; }
+      header .title-block p  { font-size: 0.68rem; }
+      .view  { padding: 16px; }
+      .comm-card { padding: 18px 16px; }
+      .company-banner { padding: 16px; }
+      .total-row { flex-direction: column; gap: 12px; align-items: flex-end; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════ HEADER ══════════════════ -->
+<header>
+  <img src="447670405_1005316078263765_5653249414914125489_n.jpg" alt="Rocky Mountain Services Logo" />
+  <div class="title-block">
+    <h1>Rocky Mountain Services</h1>
+    <p>Commission Reporting Portal</p>
+  </div>
+</header>
+
+<!-- ══════════════════ VIEW TOGGLE ══════════════════ -->
+<div class="view-toggle">
+  <button class="active" onclick="switchMode('employee')">Employee View</button>
+  <button onclick="switchMode('boss')">Boss View</button>
+</div>
+
+<!-- ══════════════════ EMPLOYEE VIEW ══════════════════ -->
+<div id="view-employee" class="view active">
+
+  <!-- Login Form -->
+  <div id="emp-login" class="login-wrap">
+    <div class="login-card">
+      <h2>Employee Login</h2>
+      <p>Select your name and enter your password to view your commission card.</p>
+
+      <label>Select Employee</label>
+      <select id="emp-select">
+        <option value="">— Choose your name —</option>
+        <option value="mike">Mike Johnson</option>
+        <option value="sarah">Sarah Martinez</option>
+        <option value="dave">Dave Thompson</option>
+      </select>
+
+      <label>Password</label>
+      <input type="password" id="emp-password" placeholder="Enter your password" onkeydown="if(event.key==='Enter')empLogin()" />
+
+      <button class="btn-primary" onclick="empLogin()">View My Card</button>
+      <div class="error-msg" id="emp-error">Incorrect password. Please try again.</div>
+
+      <p style="margin-top:18px; font-size:0.75rem; color:var(--gray); text-align:center;">
+        Demo passwords — Mike: <strong style="color:var(--orange)">rocky1</strong> &nbsp;|&nbsp;
+        Sarah: <strong style="color:var(--orange)">rocky2</strong> &nbsp;|&nbsp;
+        Dave: <strong style="color:var(--orange)">rocky3</strong>
+      </p>
+    </div>
+  </div>
+
+  <!-- Employee Commission Card (hidden until login) -->
+  <div id="emp-card-view" style="display:none;">
+    <div class="action-bar">
+      <span id="emp-greeting" style="font-weight:700; color:var(--white); font-size:1.1rem;"></span>
+      <button class="btn-ghost" onclick="empLogout()">&#8592; Logout</button>
+    </div>
+    <div id="emp-card-content"></div>
+  </div>
+</div>
+
+<!-- ══════════════════ BOSS VIEW ══════════════════ -->
+<div id="view-boss" class="view">
+
+  <!-- Boss Login Form -->
+  <div id="boss-login" class="login-wrap">
+    <div class="login-card">
+      <h2>Boss / Admin Login</h2>
+      <p>Enter the admin password to view all employee cards and company totals.</p>
+
+      <label>Admin Password</label>
+      <input type="password" id="boss-password" placeholder="Enter admin password" onkeydown="if(event.key==='Enter')bossLogin()" />
+
+      <button class="btn-primary" onclick="bossLogin()">Access Dashboard</button>
+      <div class="error-msg" id="boss-error">Incorrect admin password.</div>
+
+      <p style="margin-top:18px; font-size:0.75rem; color:var(--gray); text-align:center;">
+        Demo password: <strong style="color:var(--orange)">admin123</strong>
+      </p>
+    </div>
+  </div>
+
+  <!-- Boss Dashboard (hidden until login) -->
+  <div id="boss-dashboard" style="display:none;">
+    <div class="action-bar">
+      <span style="font-weight:700; color:var(--orange); font-size:1.1rem; text-transform:uppercase; letter-spacing:1px;">Admin Dashboard</span>
+      <button class="btn-ghost" onclick="bossLogout()">&#8592; Logout</button>
+    </div>
+
+    <div class="boss-month-tag" id="boss-period-label"></div>
+
+    <!-- Company Wide Card -->
+    <div class="comm-card" style="border-top-color:#E05A14; margin-bottom:32px;">
+      <div class="comm-card-header">
+        <div class="employee-info">
+          <h2>Company Overview</h2>
+          <div class="role">Rocky Mountain Services — All Divisions</div>
+        </div>
+        <div class="period-badge">
+          <div class="period-label">Reporting Period</div>
+          <div class="period-val" id="boss-period-val"></div>
+        </div>
+      </div>
+
+      <div id="company-stats-grid" class="stats-grid"></div>
+      <hr class="divider" />
+      <div class="section-title">Service Breakdown — Company Wide</div>
+      <table>
+        <thead>
+          <tr>
+            <th>Service</th>
+            <th>Jobs Completed</th>
+            <th>Total Revenue</th>
+            <th>Avg Job Value</th>
+            <th>Total Commission</th>
+          </tr>
+        </thead>
+        <tbody id="company-table-body"></tbody>
+      </table>
+
+      <div class="total-row">
+        <div class="total-item">
+          <div class="total-label">Total Revenue</div>
+          <div class="total-val white" id="company-total-rev"></div>
+        </div>
+        <div class="total-item">
+          <div class="total-label">Total Commissions Paid</div>
+          <div class="total-val" id="company-total-comm"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Per-Employee Section -->
+    <div class="section-title" style="margin-bottom:16px;">Individual Employee Cards</div>
+    <div class="emp-pill-row" id="emp-pill-row"></div>
+    <div id="boss-emp-cards"></div>
+
+  </div>
+</div>
+
+<!-- ══════════════════ DATA & LOGIC ══════════════════ -->
+<script>
+  /* ────────────────────────────────────────────────
+     DEMO DATA
+  ──────────────────────────────────────────────── */
+  const PERIOD = "May 2026";
+
+  const employees = {
+    mike: {
+      name: "Mike Johnson",
+      role: "Crew Lead — Asphalt Division",
+      password: "rocky1",
+      ytdGoal: 18000,
+      ytdEarned: 11240,
+      services: [
+        { name: "Asphalt Paving",     jobs: 14, revenue: 62400, rate: 0.05 },
+        { name: "Asphalt Sealcoating",jobs:  9, revenue: 18900, rate: 0.05 },
+        { name: "Crack Filling",       jobs: 22, revenue:  8800, rate: 0.04 },
+        { name: "Snow Removal",        jobs:  5, revenue:  3750, rate: 0.03 },
+      ]
+    },
+    sarah: {
+      name: "Sarah Martinez",
+      role: "Sales Representative",
+      password: "rocky2",
+      ytdGoal: 22000,
+      ytdEarned: 14830,
+      services: [
+        { name: "Asphalt Paving",      jobs: 11, revenue: 58200, rate: 0.06 },
+        { name: "Snow Removal Contracts",jobs:18, revenue: 27000, rate: 0.05 },
+        { name: "Parking Lot Striping", jobs:  7, revenue:  5600, rate: 0.04 },
+        { name: "Asphalt Sealcoating",  jobs:  4, revenue:  8400, rate: 0.05 },
+      ]
+    },
+    dave: {
+      name: "Dave Thompson",
+      role: "Field Supervisor — Snow Division",
+      password: "rocky3",
+      ytdGoal: 15000,
+      ytdEarned: 9610,
+      services: [
+        { name: "Snow Plowing",         jobs: 38, revenue: 28500, rate: 0.04 },
+        { name: "De-Icing / Salt",      jobs: 25, revenue: 12500, rate: 0.04 },
+        { name: "Sidewalk Clearing",    jobs: 20, revenue:  6000, rate: 0.03 },
+        { name: "Asphalt Patching",     jobs:  6, revenue: 14400, rate: 0.04 },
+      ]
+    }
+  };
+
+  const BOSS_PASSWORD = "admin123";
+
+  /* ────────────────────────────────────────────────
+     HELPERS
+  ──────────────────────────────────────────────── */
+  const fmt = (n) => n.toLocaleString('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
+  const fmtDec = (n) => n.toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+  function calcEmp(emp) {
+    let totalRev = 0, totalComm = 0, totalJobs = 0;
+    emp.services.forEach(s => {
+      const comm = s.revenue * s.rate;
+      totalRev  += s.revenue;
+      totalComm += comm;
+      totalJobs += s.jobs;
+    });
+    return { totalRev, totalComm, totalJobs };
+  }
+
+  /* ────────────────────────────────────────────────
+     VIEW SWITCHER
+  ──────────────────────────────────────────────── */
+  function switchMode(mode) {
+    document.getElementById('view-employee').classList.toggle('active', mode === 'employee');
+    document.getElementById('view-boss').classList.toggle('active', mode === 'boss');
+    document.querySelectorAll('.view-toggle button').forEach((b, i) => {
+      b.classList.toggle('active', (i === 0 && mode === 'employee') || (i === 1 && mode === 'boss'));
+    });
+  }
+
+  /* ────────────────────────────────────────────────
+     BUILD A COMMISSION CARD HTML
+  ──────────────────────────────────────────────── */
+  function buildCard(key, showYtd = true) {
+    const emp = employees[key];
+    const { totalRev, totalComm, totalJobs } = calcEmp(emp);
+    const ytdPct = Math.min(100, Math.round((emp.ytdEarned / emp.ytdGoal) * 100));
+
+    let rows = '';
+    emp.services.forEach(s => {
+      const comm = s.revenue * s.rate;
+      rows += `<tr>
+        <td>${s.name}</td>
+        <td>${s.jobs}</td>
+        <td>${fmt(s.revenue)}</td>
+        <td>${fmt(Math.round(s.revenue / s.jobs))}</td>
+        <td class="td-orange">${(s.rate * 100).toFixed(0)}%</td>
+        <td class="td-green">${fmtDec(comm)}</td>
+      </tr>`;
+    });
+
+    const ytdSection = showYtd ? `
+      <hr class="divider" />
+      <div class="ytd-section">
+        <div class="section-title">Year-to-Date Progress</div>
+        <div class="ytd-label-row">
+          <span>YTD Commission Earned &nbsp;(${ytdPct}% of annual goal)</span>
+          <span>${fmt(emp.ytdEarned)} / ${fmt(emp.ytdGoal)}</span>
+        </div>
+        <div class="ytd-bar-bg">
+          <div class="ytd-bar-fill" style="width:${ytdPct}%"></div>
+        </div>
+      </div>` : '';
+
+    return `
+      <div class="comm-card">
+        <div class="comm-card-header">
+          <div class="employee-info">
+            <h2>${emp.name}</h2>
+            <div class="role">${emp.role}</div>
+          </div>
+          <div class="period-badge">
+            <div class="period-label">Reporting Period</div>
+            <div class="period-val">${PERIOD}</div>
+          </div>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-box">
+            <div class="stat-label">Jobs Completed</div>
+            <div class="stat-val">${totalJobs}</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-label">Revenue Generated</div>
+            <div class="stat-val">${fmt(totalRev)}</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-label">This Month Commission</div>
+            <div class="stat-val green">${fmtDec(totalComm)}</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-label">YTD Commission</div>
+            <div class="stat-val orange">${fmt(emp.ytdEarned)}</div>
+          </div>
+        </div>
+
+        <hr class="divider" />
+        <div class="section-title">Service Breakdown</div>
+        <table>
+          <thead>
+            <tr>
+              <th>Service</th>
+              <th>Jobs</th>
+              <th>Revenue</th>
+              <th>Avg/Job</th>
+              <th>Rate</th>
+              <th>Commission</th>
+            </tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>
+
+        <div class="total-row">
+          <div class="total-item">
+            <div class="total-label">Total Revenue</div>
+            <div class="total-val white">${fmt(totalRev)}</div>
+          </div>
+          <div class="total-item">
+            <div class="total-label">Monthly Commission Earned</div>
+            <div class="total-val">${fmtDec(totalComm)}</div>
+          </div>
+        </div>
+        ${ytdSection}
+      </div>`;
+  }
+
+  /* ────────────────────────────────────────────────
+     EMPLOYEE LOGIN / LOGOUT
+  ──────────────────────────────────────────────── */
+  function empLogin() {
+    const key  = document.getElementById('emp-select').value;
+    const pass = document.getElementById('emp-password').value;
+    const err  = document.getElementById('emp-error');
+
+    if (!key) { err.textContent = 'Please select your name.'; err.style.display = 'block'; return; }
+    if (employees[key].password !== pass) { err.style.display = 'block'; err.textContent = 'Incorrect password. Please try again.'; return; }
+
+    err.style.display = 'none';
+    document.getElementById('emp-login').style.display = 'none';
+    document.getElementById('emp-card-view').style.display = 'block';
+    document.getElementById('emp-greeting').textContent = `Welcome, ${employees[key].name}`;
+    document.getElementById('emp-card-content').innerHTML = buildCard(key, true);
+  }
+
+  function empLogout() {
+    document.getElementById('emp-login').style.display = 'flex';
+    document.getElementById('emp-card-view').style.display = 'none';
+    document.getElementById('emp-password').value = '';
+    document.getElementById('emp-select').value = '';
+  }
+
+  /* ────────────────────────────────────────────────
+     BOSS LOGIN / LOGOUT / DASHBOARD
+  ──────────────────────────────────────────────── */
+  function bossLogin() {
+    const pass = document.getElementById('boss-password').value;
+    const err  = document.getElementById('boss-error');
+    if (pass !== BOSS_PASSWORD) { err.style.display = 'block'; return; }
+
+    err.style.display = 'none';
+    document.getElementById('boss-login').style.display = 'none';
+    buildBossDashboard();
+    document.getElementById('boss-dashboard').style.display = 'block';
+  }
+
+  function bossLogout() {
+    document.getElementById('boss-login').style.display = 'flex';
+    document.getElementById('boss-dashboard').style.display = 'none';
+    document.getElementById('boss-password').value = '';
+  }
+
+  function buildBossDashboard() {
+    // Period labels
+    document.getElementById('boss-period-label').textContent = `Reporting Period: ${PERIOD}`;
+    document.getElementById('boss-period-val').textContent = PERIOD;
+
+    // Aggregate company data
+    let compJobs = 0, compRev = 0, compComm = 0;
+    const serviceMap = {};
+    Object.values(employees).forEach(emp => {
+      emp.services.forEach(s => {
+        const comm = s.revenue * s.rate;
+        compJobs += s.jobs;
+        compRev  += s.revenue;
+        compComm += comm;
+        if (!serviceMap[s.name]) serviceMap[s.name] = { jobs: 0, revenue: 0, comm: 0 };
+        serviceMap[s.name].jobs    += s.jobs;
+        serviceMap[s.name].revenue += s.revenue;
+        serviceMap[s.name].comm    += comm;
+      });
+    });
+
+    // Company stats grid
+    const avgJobVal = compJobs ? Math.round(compRev / compJobs) : 0;
+    document.getElementById('company-stats-grid').innerHTML = `
+      <div class="stat-box"><div class="stat-label">Total Employees</div><div class="stat-val">${Object.keys(employees).length}</div></div>
+      <div class="stat-box"><div class="stat-label">Total Jobs</div><div class="stat-val">${compJobs}</div></div>
+      <div class="stat-box"><div class="stat-label">Total Revenue</div><div class="stat-val">${fmt(compRev)}</div></div>
+      <div class="stat-box"><div class="stat-label">Avg Job Value</div><div class="stat-val">${fmt(avgJobVal)}</div></div>
+      <div class="stat-box"><div class="stat-label">Total Commissions</div><div class="stat-val green">${fmtDec(compComm)}</div></div>
+      <div class="stat-box"><div class="stat-label">Comm % of Revenue</div><div class="stat-val orange">${(compComm/compRev*100).toFixed(1)}%</div></div>
+    `;
+
+    // Company service table
+    let compRows = '';
+    Object.entries(serviceMap).sort((a,b) => b[1].revenue - a[1].revenue).forEach(([name, d]) => {
+      compRows += `<tr>
+        <td>${name}</td>
+        <td>${d.jobs}</td>
+        <td>${fmt(d.revenue)}</td>
+        <td>${fmt(Math.round(d.revenue / d.jobs))}</td>
+        <td class="td-green">${fmtDec(d.comm)}</td>
+      </tr>`;
+    });
+    document.getElementById('company-table-body').innerHTML = compRows;
+    document.getElementById('company-total-rev').textContent  = fmt(compRev);
+    document.getElementById('company-total-comm').textContent = fmtDec(compComm);
+
+    // Employee pills
+    const pillRow = document.getElementById('emp-pill-row');
+    pillRow.innerHTML = '';
+    Object.entries(employees).forEach(([key, emp], i) => {
+      const pill = document.createElement('button');
+      pill.className = 'emp-pill' + (i === 0 ? ' active' : '');
+      pill.textContent = emp.name;
+      pill.onclick = () => {
+        document.querySelectorAll('.emp-pill').forEach(p => p.classList.remove('active'));
+        pill.classList.add('active');
+        showEmpCard(key);
+      };
+      pillRow.appendChild(pill);
+    });
+
+    // Show first employee card
+    const firstKey = Object.keys(employees)[0];
+    document.getElementById('boss-emp-cards').innerHTML = buildCard(firstKey, true);
+  }
+
+  function showEmpCard(key) {
+    document.getElementById('boss-emp-cards').innerHTML = buildCard(key, true);
+  }
+</script>
+
+</body>
+</html>
