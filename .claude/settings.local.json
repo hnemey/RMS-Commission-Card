@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mkdir \"C:\\\\Users\\\\Harry Nemelka\\\\Documents\\\\GitHub\\\\Commision Card\\\\.claude\")",
+      "mcp__Claude_Preview__preview_start"
+    ]
+  }
+}
